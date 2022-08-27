@@ -1,0 +1,144 @@
+apply plugin: 'maven-publish'
+apply from: "${pfswGradleIncludePath}/java/dependencies.gradle"
+apply from: "${pfswGradleIncludePath}/java/pom-publishing.gradle"
+
+def getDate() {
+  def date = new Date()
+  date.format('yyyy-MM-dd')
+}
+
+def getTimestamp() {
+  def date = new Date()
+  date.format("yyyy-MM-dd'T'HH:mm:ss")
+}
+
+ext {
+  vendor = "Manfred Duchrow Consulting & Software"
+  implementor = "Programmer's Friend"
+  today = getDate()
+  now_ts = getTimestamp()
+  jdk_version = System.getProperty('java.version')
+
+  manifest_attrs = [
+    "Specification-Title": project.name,
+    "Specification-Version": version,
+    "Specification-Vendor" : project.ext.vendor,
+    "Implementation-Title": "${project.group}:${project.archivesBaseName}:${project.version}",
+    "Implementation-Version": version,
+    "Implementation-Vendor" : project.ext.implementor,
+    "Implementation-Vendor-Id" : project.group,
+    "Build-Date" : "${project.ext.now_ts}",
+    "Build-JDK" : project.ext.jdk_version,
+    "Target-Compatibility" : project.compileJava.targetCompatibility
+  ]
+  if (project.hasProperty('compilerVersion')) {
+    manifest_attrs["Java-Compiler"] = project.getProperty('compilerVersion')
+  }
+  if (project.hasProperty('autoModuleName')) {
+    manifest_attrs["Automatic-Module-Name"] = project.getProperty('autoModuleName')
+  }
+}
+
+jar {
+  manifest {
+    attributes(manifest_attrs)
+  }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+  classifier = 'sources'
+  from sourceSets.main.allSource
+  manifest {
+    attributes(manifest_attrs)
+  }
+}
+
+task javadocJar (type: Jar, dependsOn: javadoc) {
+  from javadoc.destinationDir
+}
+
+artifacts {
+  archives sourcesJar
+  archives javadocJar
+}
+
+publishing {
+  publications {
+    javaLibrary(MavenPublication) {
+      groupId group
+      artifactId archivesBaseName
+      version version
+      from components.java
+
+      artifact sourcesJar {
+        classifier "sources"
+      }
+      artifact javadocJar {
+        classifier "javadoc"
+      }
+      artifact(dependenciesFile) {
+        classifier "dependencies"
+        extension "txt"
+      }
+      
+      pom.withXml {
+        fixPomDependencyScopes(asNode())
+      }
+      
+      pom {
+        name = libDisplayName
+        description = libDescription
+        url = 'http://programmers-friend.org/'
+        licenses {
+          license {
+            name = 'Eclipse Public License - v 1.0'
+            url = 'https://www.eclipse.org/legal/epl-v10.html'
+          }
+        }
+        developers {
+        	developer {
+        	  id = 'mdu'
+        	  name = 'Manfred Duchrow'
+        	  email = 'manfred.duchrow@pfsw.org'
+        	}
+        }
+        scm {
+          url = "https://github.com/pfsw/${archivesBaseName}"
+          connection = "scm:git:https://github.com/pfsw/${archivesBaseName}.git"
+          developerConnection = "scm:git:https://github.com/pfsw/${archivesBaseName}.git"
+        }
+      }
+    }
+  }
+  repositories {
+    maven {
+      name 'LocalRelease'
+      url localReleasePath
+    }
+    maven {
+      name 'NexusRelease'
+      url nexusReleaseRepoUrl
+      credentials {
+        username = nexusUsername
+        password = nexusPassword
+      }
+    }
+    maven {
+      name 'MavenCentralStaging'
+      url 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+      credentials {
+        username = ossrhUsername
+        password = ossrhPassword
+      }
+    }
+    maven {
+      name 'MavenCentralSnapshots'
+      url 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
+      credentials {
+        username = ossrhUsername
+        password = ossrhPassword
+      }
+    }
+  }
+}
+

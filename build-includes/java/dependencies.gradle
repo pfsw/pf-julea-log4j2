@@ -1,0 +1,13 @@
+ext {
+	dependenciesFile = file("build/tmp/dependencies.txt")
+}
+
+task dependenciesToTextFile(type: DependencyReportTask) {
+  if (project.hasProperty('dependencyConfig'))
+  {
+    configuration = project.getProperty('dependencyConfig')
+  }
+  outputFile dependenciesFile
+}
+assemble.dependsOn(dependenciesToTextFile)
+javadoc.dependsOn(dependenciesToTextFile)

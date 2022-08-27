@@ -1,0 +1,71 @@
+apply plugin: 'java'
+
+group = 'org.pfsw'
+version = '1.0.0'
+
+ext {
+  javaVersion = '1.8'
+  javaModuleNameSuffix = 'julea-log4j2'
+  autoModuleName = "${group}.${javaModuleNameSuffix}"
+  libDisplayName = "PF JUnit Log Event Assertion (log4j2)"
+  libDescription = "Library for asserting (log4j2) log events during junit testing"
+    
+  repoUrlThirdParty = project.hasProperty('thirdPartyRepoUrl') ? project.getProperty('thirdPartyRepoUrl') : ''
+  repoUrlReleases = project.hasProperty('pfswReleaseRepoUrl') ? project.getProperty('pfswReleaseRepoUrl') : ''
+    
+  nexusReleaseRepoUrl = repoUrlReleases
+  nexusUsername = project.hasProperty('repo_user_name') ? project.getProperty('repo_user_name') : "master"
+  nexusPassword = project.hasProperty('repo_user_password') ? project.getProperty('repo_user_password') : "desaster"
+
+  localReleasePath = project.hasProperty('localReleasesDir') ? project.getProperty('localReleasesDir') : System.env['PF_RELEASES_REPO']
+  
+  sourceEncoding = project.hasProperty('source_encoding') ? project.getProperty('source_encoding') : 'UTF-8'
+  islocalDevelopment = project.hasProperty('local_development') ? 'true'.equals(project.getProperty('local_development')) : false
+  publishWithTests = false
+  
+  log4jVersion = '2.18.0'
+  junit5Version = '5.9.0'
+}
+archivesBaseName = "pf-${javaModuleNameSuffix}"
+
+configurations {
+    provided
+    implementation.extendsFrom(provided)
+}
+
+apply from: "${pfswGradleIncludePath}/java/publishing-java-full.gradle"
+
+dependencies {
+  provided group: 'junit', name: 'junit', version: '4.12'
+  provided group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junit5Version
+  provided group: 'org.apache.logging.log4j', name: 'log4j-core', version: log4jVersion
+  
+  testImplementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.36'
+  testImplementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: log4jVersion
+  testImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine', version: junit5Version
+}
+
+project.sourceCompatibility = javaVersion
+project.targetCompatibility = javaVersion
+
+tasks.withType(JavaCompile) {
+  sourceCompatibility = javaVersion
+  targetCompatibility = javaVersion
+  options*.encoding = project.ext.sourceEncoding
+  options.compilerArgs << "-Xlint:unchecked"
+}
+
+repositories {
+  if (islocalDevelopment)
+  {
+    mavenLocal()
+  }
+  maven { 
+    url repoUrlThirdParty 
+  }
+}
+
+wrapper { gradleVersion = '6.7.1' }
+
+println "${libDisplayName}: ${project.name} ${project.version} (moduleName:${autoModuleName}) ; Java ${javaVersion}"
+println "Include path: ${pfswGradleIncludePath}"

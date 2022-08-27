@@ -1,0 +1,96 @@
+/**
+ * Checks if the dependency elements in the given POM have no version set.
+ * If that's the case, a version element will be added from the according reloved
+ * runtime dependecy.
+ *
+ * @param pomXml The XML representation of a POM file.
+ */
+ext.addMissingDependencyVersions = { pomXml ->
+   pomXml.dependencies.'*'.each { depTag ->
+      if (!depTag.version)
+      {
+         ResolvedDependency dependency = project.configurations.runtime.resolvedConfiguration.firstLevelModuleDependencies.find { dep ->
+         (dep.moduleGroup == depTag.groupId.text()) && (dep.moduleName == depTag.artifactId.text())
+         }
+         if (dependency)
+         {
+            depTag.appendNode('version', dependency.moduleVersion)
+         }
+      }
+   }
+}
+
+ext.findProvidedDependency = { depTag ->
+  if (configurations.hasProperty('provided'))
+  {
+     return configurations.provided.resolvedConfiguration.firstLevelModuleDependencies.find { dep ->
+       (dep.moduleGroup == depTag.groupId.text()) && (dep.moduleName == depTag.artifactId.text())
+     }
+  }
+  return null
+}
+
+/**
+ * Checks if the dependency elements in the given POM have scope="runtime" but are
+ * actually in the 'compile' dependency of this project.
+ * If that's the case, the scope in the POM will be changed to 'compile'.
+ * It also changes the scope of dependencies that actually must be 'provided'!
+ *
+ * @param pomXml The XML representation of a POM file.
+ */
+ext.fixPomDependencyScopes = { pomXml ->
+  pomXml.dependencies.'*'.each { depTag ->
+    if (depTag.scope.text() == 'runtime') 
+    {
+      def dependency = findProvidedDependency depTag
+      if (dependency) 
+  	  {
+        depTag.scope[0].value = 'provided' 
+  	  }
+  	  else
+  	  {
+    		dependency = findCompileDependency depTag
+    		if (dependency) 
+    		{
+    		   depTag.scope[0].value = 'compile' 
+    		}
+  	  }
+    }
+  }
+}
+
+ext.findCompileDependency = { depTag ->
+  return configurations.compile.resolvedConfiguration.firstLevelModuleDependencies.find { dep ->
+    (dep.moduleGroup == depTag.groupId.text()) && (dep.moduleName == depTag.artifactId.text())
+  }
+}
+
+ext.findCompileOnlyDependency = { depTag ->
+  if (configurations.hasProperty('compileOnly'))
+  {
+     return configurations.compileOnly.resolvedConfiguration.firstLevelModuleDependencies.find { dep ->
+       (dep.moduleGroup == depTag.groupId.text()) && (dep.moduleName == depTag.artifactId.text())
+     }
+  }
+  return null
+}
+
+ext.findImplementationDependency = { depTag ->
+  if (configurations.hasProperty('implementation'))
+  {
+     return configurations.implementation.resolvedConfiguration.firstLevelModuleDependencies.find { dep ->
+       (dep.moduleGroup == depTag.groupId.text()) && (dep.moduleName == depTag.artifactId.text())
+     }
+  }
+  return null
+}
+
+ext.findProvidedDependency = { depTag ->
+  if (configurations.hasProperty('provided'))
+  {
+     return configurations.provided.resolvedConfiguration.firstLevelModuleDependencies.find { dep ->
+       (dep.moduleGroup == depTag.groupId.text()) && (dep.moduleName == depTag.artifactId.text())
+     }
+  }
+  return null
+}
