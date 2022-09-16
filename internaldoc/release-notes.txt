@@ -1,0 +1,9 @@
+RELEASE NOTES FOR pf-julea-log4j2 (JUnit Log Event Assertion)
+=======================================================================
+
+VERSION 1.0.0 (16/09/2022), 11 Unit-Tests, 93.0% Coverage
+
+* log event assertion for junit 4
+* log event assertion for junit 5
+
+-----------------------------------------------------------------------
