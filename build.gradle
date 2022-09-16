@@ -12,6 +12,8 @@ ext {
     
   repoUrlThirdParty = project.hasProperty('thirdPartyRepoUrl') ? project.getProperty('thirdPartyRepoUrl') : ''
   repoUrlReleases = project.hasProperty('pfswReleaseRepoUrl') ? project.getProperty('pfswReleaseRepoUrl') : ''
+  ossrhUrlStaging = project.hasProperty('ossrhStagingRepoUrl') ? project.getProperty('ossrhStagingRepoUrl') : ''
+  ossrhUrlSnapshots = project.hasProperty('ossrhSnapshotsRepoUrl') ? project.getProperty('ossrhSnapshotsRepoUrl') : ''
     
   nexusReleaseRepoUrl = repoUrlReleases
   nexusUsername = project.hasProperty('repo_user_name') ? project.getProperty('repo_user_name') : "master"

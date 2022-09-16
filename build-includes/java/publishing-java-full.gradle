@@ -91,8 +91,8 @@ publishing {
         url = 'http://programmers-friend.org/'
         licenses {
           license {
-            name = 'Eclipse Public License - v 1.0'
-            url = 'https://www.eclipse.org/legal/epl-v10.html'
+            name = 'Eclipse Public License - v 2.0'
+            url = 'https://www.eclipse.org/legal/epl-2.0/'
           }
         }
         developers {
@@ -125,7 +125,7 @@ publishing {
     }
     maven {
       name 'MavenCentralStaging'
-      url 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+      url ossrhUrlStaging
       credentials {
         username = ossrhUsername
         password = ossrhPassword
@@ -133,7 +133,7 @@ publishing {
     }
     maven {
       name 'MavenCentralSnapshots'
-      url 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
+      url ossrhUrlSnapshots
       credentials {
         username = ossrhUsername
         password = ossrhPassword
