@@ -1,3 +1,7 @@
+plugins {
+  id 'signing'
+}
+
 apply plugin: 'java'
 
 group = 'org.pfsw'
@@ -36,6 +40,9 @@ configurations {
 }
 
 apply from: "${pfswGradleIncludePath}/java/publishing-java-full.gradle"
+signing {
+  sign publishing.publications.mavenJava
+}
 
 dependencies {
   provided group: 'junit', name: 'junit', version: '4.12'
