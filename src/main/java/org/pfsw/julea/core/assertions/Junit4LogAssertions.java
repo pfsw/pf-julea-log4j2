@@ -43,6 +43,30 @@ public class Junit4LogAssertions
   }
 
   /**
+   * Asserts that a log entry containing (all) the given text elements was captured by the given log entry tracker.
+   * 
+   * @param tracker The tracker that captured log entries for specific loggers.
+   * @param enumValue A single enum value that's name is expected to be in a log message. 
+   * @param textElements The expected log message text parts.
+   */
+  public static void assertLogEntry(LogEntriesTracker tracker, Enum<?> enumValue, String... textElements)
+  {
+    ASSERTIONS.assertLogEntry(tracker, ASSERTIONS.concatenate(enumValue.name(), textElements));
+  }
+
+  /**
+   * Asserts that no log entry containing (all) the given text elements was captured by the given log entry tracker.
+   * 
+   * @param tracker The tracker that captured log entries for specific loggers.
+   * @param enumValue A single enum value that's name is expected not to be in a log message. 
+   * @param textElements The log message text parts to be checked.
+   */
+  public static void assertNoLogEntry(LogEntriesTracker tracker, Enum<?> enumValue, String... textElements)
+  {
+    ASSERTIONS.assertNoLogEntry(tracker, ASSERTIONS.concatenate(enumValue.name(), textElements));
+  }
+
+  /**
    * Asserts that a log entry with the specified log level and all the given text elements in the log message was captured by the given log entry tracker.
    * 
    * @param tracker The tracker that captured log entries for specific loggers.

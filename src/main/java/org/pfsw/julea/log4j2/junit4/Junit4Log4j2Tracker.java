@@ -71,13 +71,13 @@ public class Junit4Log4j2Tracker extends BaseLog4j2Tracker implements Junit4LogE
       }
     };
   }
-  
+
   @Override
   protected void initialization()
   {
     super.initialization();
   }
-  
+
   @Override
   protected void cleanup()
   {

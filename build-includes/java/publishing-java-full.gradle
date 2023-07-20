@@ -62,9 +62,13 @@ artifacts {
   archives javadocJar
 }
 
+tasks.withType(GenerateModuleMetadata) {
+  enabled = false
+}
+
 publishing {
   publications {
-    javaLibrary(MavenPublication) {
+    mavenJava(MavenPublication) {
       groupId group
       artifactId archivesBaseName
       version version
@@ -82,7 +86,14 @@ publishing {
       }
       
       pom.withXml {
-        fixPomDependencyScopes(asNode())
+        if (publishWithoutDependencies)
+        {
+          removeAllPomDependencies(asNode())          
+        }
+        else
+        {
+          fixPomDependencyScopes(asNode())          
+        }
       }
       
       pom {

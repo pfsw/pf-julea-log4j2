@@ -91,4 +91,13 @@ class LogAssertions
   {
     assertFalse.accept(tracker.hasLogEntryMatching(regex));
   }
+  
+  String[] concatenate(String value1, String[] otherValues)
+  {
+    String[] result = new String[otherValues.length + 1];
+    
+    result[0] = value1;
+    System.arraycopy(otherValues, 0, result, 1, otherValues.length);
+    return result;
+  }
 }

@@ -1,6 +1,6 @@
 /**
  * Checks if the dependency elements in the given POM have no version set.
- * If that's the case, a version element will be added from the according reloved
+ * If that's the case, a version element will be added from the according resolved
  * runtime dependecy.
  *
  * @param pomXml The XML representation of a POM file.
@@ -20,16 +20,6 @@ ext.addMissingDependencyVersions = { pomXml ->
    }
 }
 
-ext.findProvidedDependency = { depTag ->
-  if (configurations.hasProperty('provided'))
-  {
-     return configurations.provided.resolvedConfiguration.firstLevelModuleDependencies.find { dep ->
-       (dep.moduleGroup == depTag.groupId.text()) && (dep.moduleName == depTag.artifactId.text())
-     }
-  }
-  return null
-}
-
 /**
  * Checks if the dependency elements in the given POM have scope="runtime" but are
  * actually in the 'compile' dependency of this project.
@@ -42,21 +32,31 @@ ext.fixPomDependencyScopes = { pomXml ->
   pomXml.dependencies.'*'.each { depTag ->
     if (depTag.scope.text() == 'runtime') 
     {
-      def dependency = findProvidedDependency depTag
-      if (dependency) 
-  	  {
-        depTag.scope[0].value = 'provided' 
-  	  }
-  	  else
-  	  {
-    		dependency = findCompileDependency depTag
-    		if (dependency) 
-    		{
-    		   depTag.scope[0].value = 'compile' 
-    		}
-  	  }
+      if (ext.publishFixScopeProvided)
+      {
+        def dependency = findProvidedDependency depTag
+        if (dependency) 
+        {
+          depTag.scope[0].value = 'provided' 
+        }
+      }
+      if (ext.publishFixScopeCompile)
+      {
+        def dependency = findCompileDependency depTag
+        if (dependency) 
+        {
+           depTag.scope[0].value = 'compile' 
+        }
+      }
     }
   }
+}
+
+/**
+ * Removes all dependencies from the pom XML.
+ */
+ext.removeAllPomDependencies = { pomXml ->
+  pomXml.remove(pomXml.dependencies)
 }
 
 ext.findCompileDependency = { depTag ->

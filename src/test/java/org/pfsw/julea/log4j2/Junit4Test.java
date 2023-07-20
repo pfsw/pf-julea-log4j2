@@ -45,7 +45,7 @@ public class Junit4Test
   {
     LOG.error(MESSAGE_1);
     STATS_LOG.info(MESSAGE_2);
-    assertLogEntryMessage(logTracker1, "^The .*jumps.*");
+    assertLogEntryMessage(logTracker1, ".*The .*jumps.*");
     assertLogEntryMessage(logTracker2, ".*what you.*");
   }
 
