@@ -1,13 +1,17 @@
-package org.pfsw.julea.log4j2;
+package org.pfsw.julea.log4j2.junit4;
 
-import static org.pfsw.julea.core.assertions.Junit4LogAssertions.*;
-import static org.pfsw.julea.log4j2.testhelper.UnitTestHelper.*;
+import static org.pfsw.julea.core.assertions.Junit4LogAssertions.assertLogEntry;
+import static org.pfsw.julea.core.assertions.Junit4LogAssertions.assertLogEntryMessage;
+import static org.pfsw.julea.core.assertions.Junit4LogAssertions.assertNoLogEntry;
+import static org.pfsw.julea.core.assertions.Junit4LogAssertions.assertNoLogEntryMessage;
+import static org.pfsw.julea.log4j2.testhelper.UnitTestHelper.MESSAGE_1;
+import static org.pfsw.julea.log4j2.testhelper.UnitTestHelper.MESSAGE_2;
+import static org.pfsw.julea.log4j2.testhelper.UnitTestHelper.STATS_LOGGER_NAME;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.pfsw.julea.core.LogLevel;
-import org.pfsw.julea.log4j2.junit4.Junit4Log4j2Tracker;
-import org.pfsw.julea.log4j2.junit4.Junit4LogEntriesTracker;
+import org.pfsw.julea.core.junit4.Junit4LogEntriesTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

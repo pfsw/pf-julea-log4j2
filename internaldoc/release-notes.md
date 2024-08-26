@@ -1,5 +1,10 @@
 # Release notes for pf-julea-log4j2 (JUnit Log Event Assertion)
 
+## Version 2.0.0 (23/08/2024), 14 Unit-Tests, 94.6% Coverage
+
+- Extracted generic part to pf-julea-core
+- Setting additivity of in-memory appender to true if necessary to ensure configured log output doesn't get lost
+
 ## Version 1.1.0 (20/07/2023), 23 Unit-Tests, 93.4% Coverage
 
 - Support for enum values in assertion methods

@@ -1,7 +1,7 @@
 # JUnit Log Event Assertion for log4j2 (JULEA-log4j2)
 
 The purpose of this library is to provide a simple way of tracking log events during the execution of JUnit tests
-and asserting the existence or non-existence of specific log events in the tests.
+and asserting the existence or non-existence of specific log events during the test execution.
 
 This is usually helpful if functionality gets tested by a unit test that does not return any result that could be directly asserted.
 However, if there is some logging in the tested code it might be an option to ensure that specific log messages have been created
@@ -17,6 +17,8 @@ Set the following maven or gradle dependencies as appropriate for your project:
 
 ## Dependencies
 
+See also [mvnrepository](https://mvnrepository.com/artifact/org.pfsw/pf-julea-log4j2).
+
 ### JUnit 5
 
 Maven:
@@ -26,7 +28,7 @@ Maven:
   <dependency>
     <groupId>org.pfsw</groupId>
     <artifactId>pf-julea-log4j2</artifactId>
-    <version>1.1.0</version>
+    <version>2.0.0</version>
     <scope>test</scope>
   </dependency>
   <dependency>
@@ -38,7 +40,7 @@ Maven:
   <dependency>
     <groupId>org.junit.jupiter</groupId>
     <artifactId>junit-jupiter-api</artifactId>
-    <version>5.9.3</version>
+    <version>5.11.0</version>
     <scope>test</scope>
   </dependency>
 </dependencies>
@@ -48,9 +50,9 @@ Gradle:
 
 ````groovy
 dependencies {
-  testImplementation group: 'org.pfsw', name: 'pf-julea-log4j2', version: '1.1.0'
+  testImplementation group: 'org.pfsw', name: 'pf-julea-log4j2', version: '2.0.0'
   testImplementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.20.0'
-  testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.9.3'
+  testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.11.0'
 }
 ````
 
@@ -63,7 +65,7 @@ Maven:
   <dependency>
     <groupId>org.pfsw</groupId>
     <artifactId>pf-julea-log4j2</artifactId>
-    <version>1.1.0</version>
+    <version>2.0.0</version>
     <scope>test</scope>
 	</dependency>
   <dependency>
@@ -85,7 +87,7 @@ Gradle:
 
 ````groovy
 dependencies {
-  testImplementation group: 'org.pfsw', name: 'pf-julea-log4j2', version: '1.1.0'
+  testImplementation group: 'org.pfsw', name: 'pf-julea-log4j2', version: '2.0.0'
   testImplementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.20.0'
   testImplementation group: 'junit', name: 'junit', version: '4.13.2'
 }
@@ -187,8 +189,8 @@ public class Junit5Test
 import org.junit.Rule;
 import org.junit.Test;
 import org.pfsw.julea.core.LogEntriesTracker;
-import org.pfsw.julea.log4j2.junit4.Junit4Log4j2Asserter;
-import org.pfsw.julea.log4j2.junit4.Junit4LogEntriesTracker;
+import org.pfsw.julea.log4j2.junit4.junit4.Junit4Log4j2Asserter;
+import org.pfsw.julea.log4j2.junit4.junit4.Junit4LogEntriesTracker;
 import org.pfsw.julea.log4j2.testhelper.LogId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -231,7 +233,7 @@ import static org.pfsw.julea.core.assertions.Junit4LogAssertions.*;
 import org.junit.Rule;
 import org.junit.Test;
 import org.pfsw.julea.core.LogLevel;
-import org.pfsw.julea.log4j2.junit4.Junit4Log4j2Tracker;
+import org.pfsw.julea.log4j2.junit4.junit4.Junit4Log4j2Tracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,12 +1,13 @@
-package org.pfsw.julea.log4j2;
+package org.pfsw.julea.log4j2.junit5;
 
-import static org.pfsw.julea.log4j2.testhelper.UnitTestHelper.*;
+import static org.pfsw.julea.log4j2.testhelper.UnitTestHelper.MESSAGE_1;
+import static org.pfsw.julea.log4j2.testhelper.UnitTestHelper.MESSAGE_2;
+import static org.pfsw.julea.log4j2.testhelper.UnitTestHelper.MESSAGE_3;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.pfsw.julea.core.LogEntriesTracker;
-import org.pfsw.julea.log4j2.junit5.Junit5Log4j2Asserter;
-import org.pfsw.julea.log4j2.junit5.Junit5LogEntriesTracker;
+import org.pfsw.julea.core.junit5.Junit5LogEntriesTracker;
 import org.pfsw.julea.log4j2.testhelper.LogId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

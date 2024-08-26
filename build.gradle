@@ -2,13 +2,13 @@ plugins {
   id 'signing'
 }
 
-apply plugin: 'java'
+apply plugin: 'java-library'
 
 group = 'org.pfsw'
-version = '1.1.0'
+version = '2.0.0'
 
 ext {
-  javaVersion = '1.8'
+  javaVersion = '8'
   javaModuleNameSuffix = 'julea-log4j2'
   autoModuleName = "${group}.${javaModuleNameSuffix}"
   libDisplayName = "PF JUnit Log Event Assertion (log4j2)"
@@ -28,20 +28,15 @@ ext {
   sourceEncoding = project.hasProperty('source_encoding') ? project.getProperty('source_encoding') : 'UTF-8'
   islocalDevelopment = project.hasProperty('local_development') ? 'true'.equals(project.getProperty('local_development')) : false
   publishWithTests = false
-  publishWithoutDependencies = true
+  publishWithoutDependencies = false
   publishFixScopeCompile = true // not really relevant
   publishFixScopeProvided = true // not really relevant
 
   log4jVersion = '2.20.0'
   junit4Version = '4.13.2'
-  junit5Version = '5.9.3'
+  junit5Version = '5.11.0'
 }
 archivesBaseName = "pf-${javaModuleNameSuffix}"
-
-configurations {
-    provided
-    implementation.extendsFrom(provided)
-}
 
 apply from: "${pfswGradleIncludePath}/java/publishing-java-full.gradle"
 
@@ -50,13 +45,18 @@ signing {
 }
 
 dependencies {
-  provided group: 'junit', name: 'junit', version: junit4Version
-  provided group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junit5Version
-  provided group: 'org.apache.logging.log4j', name: 'log4j-core', version: log4jVersion
+  api group: group, name: 'pf-julea-core', version: '1.0.0'
+  compileOnly group: 'junit', name: 'junit', version: junit4Version
+  compileOnly group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junit5Version
+  compileOnly group: 'org.apache.logging.log4j', name: 'log4j-core', version: log4jVersion
   
-  testImplementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.36'
+  testImplementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: log4jVersion
   testImplementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: log4jVersion
-  testImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine', version: junit5Version
+  testImplementation group: 'junit', name: 'junit', version: junit4Version
+  testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junit5Version
+  testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junit5Version
+  testRuntimeOnly group: 'org.junit.vintage', name: 'junit-vintage-engine', version: junit5Version
+  testRuntimeOnly group: 'org.slf4j', name: 'slf4j-api', version: '1.7.36'
 }
 
 project.sourceCompatibility = javaVersion

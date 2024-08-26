@@ -8,8 +8,6 @@
 // ===========================================================================
 package org.pfsw.julea.log4j2;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +17,7 @@ import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.appender.AbstractAppender;
 import org.pfsw.julea.core.InMemoryLogAppender;
+import org.pfsw.julea.core.InMemoryLogRecordsCollector;
 import org.pfsw.julea.core.LogLevel;
 import org.pfsw.julea.core.LogRecord;
 
@@ -29,7 +28,7 @@ public class Log4j2InMemoryLogAppender extends AbstractAppender implements InMem
 {
   private static final Map<Level, LogLevel> LOG_LEVEL_MAPPING = initLogLevelMapping();
 
-  private final List<LogRecord> logRecords = Collections.synchronizedList(new ArrayList<>());
+  private final InMemoryLogRecordsCollector logRecordsCollector = InMemoryLogRecordsCollector.create();
 
   public static Log4j2InMemoryLogAppender createAppender(String name, Filter filter)
   {
@@ -40,14 +39,14 @@ public class Log4j2InMemoryLogAppender extends AbstractAppender implements InMem
   {
     Map<Level, LogLevel> mapping = new HashMap<>();
 
-    mapping.put(Level.OFF, LogLevel.OFF);
+    mapping.put(Level.ALL, LogLevel.ALL);
     mapping.put(Level.TRACE, LogLevel.TRACE);
     mapping.put(Level.DEBUG, LogLevel.DEBUG);
     mapping.put(Level.INFO, LogLevel.INFO);
     mapping.put(Level.WARN, LogLevel.WARN);
     mapping.put(Level.ERROR, LogLevel.ERROR);
     mapping.put(Level.FATAL, LogLevel.FATAL);
-    mapping.put(Level.ALL, LogLevel.ALL);
+    mapping.put(Level.OFF, LogLevel.OFF);
 
     return mapping;
   }
@@ -61,7 +60,13 @@ public class Log4j2InMemoryLogAppender extends AbstractAppender implements InMem
   @Override
   public void append(LogEvent event)
   {
-    getLogRecords().add(new LogRecord(mapLogLevel(event.getLevel()), event.getMessage().getFormattedMessage()));
+    getLogRecordsCollector().append(LogRecord.create(mapLogLevel(event.getLevel()), event.getMessage().getFormattedMessage()));
+  }
+
+  @Override
+  public void clear()
+  {
+    getLogRecordsCollector().clear();
   }
 
   @Override
@@ -73,11 +78,16 @@ public class Log4j2InMemoryLogAppender extends AbstractAppender implements InMem
   @Override
   public List<LogRecord> getLogRecords()
   {
-    return this.logRecords;
+    return getLogRecordsCollector().getLogRecords();
   }
 
   protected LogLevel mapLogLevel(Level level)
   {
     return LOG_LEVEL_MAPPING.getOrDefault(level, LogLevel.OFF);
+  }
+
+  protected InMemoryLogRecordsCollector getLogRecordsCollector()
+  {
+    return this.logRecordsCollector;
   }
 }

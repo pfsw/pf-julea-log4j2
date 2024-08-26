@@ -9,6 +9,7 @@
 package org.pfsw.julea.log4j2.junit5;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
+import org.pfsw.julea.core.junit5.Junit5LogEntriesTracker;
 import org.pfsw.julea.log4j2.BaseLog4j2Tracker;
 
 public class Junit5Log4j2Tracker extends BaseLog4j2Tracker implements Junit5LogEntriesTracker

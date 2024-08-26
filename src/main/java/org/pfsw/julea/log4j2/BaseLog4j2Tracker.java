@@ -10,8 +10,10 @@ package org.pfsw.julea.log4j2;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.Logger;
@@ -72,19 +74,36 @@ public abstract class BaseLog4j2Tracker implements InMemoryLogEntriesTracker
     };
     setLog4jAppender(Log4j2InMemoryLogAppender.createAppender("in-memory", filter));
     getLog4jAppender().start();
-    for (Logger logger : loggers)
+    for (Logger logger : getLoggers())
     {
+      makeInheritParentAppendersIfReasonable(logger);
       logger.addAppender(getLog4jAppender());
+    }
+  }
+
+  protected void makeInheritParentAppendersIfReasonable(Logger logger)
+  {
+    Map<String, Appender> existingAppenders;
+
+    existingAppenders = logger.getAppenders();
+    if ((existingAppenders == null) || existingAppenders.isEmpty())
+    {
+      // The logger has no appenders assigned directly to it, it will be using
+      // its parent appenders.
+      // Since we are adding our own appender to that logger, we have to ensure that
+      // the parent logger appenders are still used, too.
+      logger.setAdditive(true);
     }
   }
 
   protected void cleanup()
   {
     clear();
-    for (Logger logger : loggers)
+    for (Logger logger : getLoggers())
     {
       logger.removeAppender(getLog4jAppender());
     }
+    getLoggers().clear();
   }
 
   protected List<Logger> getLoggers()

@@ -10,6 +10,7 @@ package org.pfsw.julea.log4j2.junit4;
 
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
+import org.pfsw.julea.core.junit4.Junit4LogEntriesTracker;
 import org.pfsw.julea.log4j2.BaseLog4j2Tracker;
 
 public class Junit4Log4j2Tracker extends BaseLog4j2Tracker implements Junit4LogEntriesTracker

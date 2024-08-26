@@ -1,12 +1,12 @@
-package org.pfsw.julea.log4j2;
+package org.pfsw.julea.log4j2.junit4;
 
-import static org.pfsw.julea.log4j2.testhelper.UnitTestHelper.*;
+import static org.pfsw.julea.log4j2.testhelper.UnitTestHelper.MESSAGE_1;
+import static org.pfsw.julea.log4j2.testhelper.UnitTestHelper.MESSAGE_2;
+import static org.pfsw.julea.log4j2.testhelper.UnitTestHelper.MESSAGE_3;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.pfsw.julea.core.LogEntriesTracker;
-import org.pfsw.julea.log4j2.junit4.Junit4Log4j2Asserter;
-import org.pfsw.julea.log4j2.junit4.Junit4LogEntriesTracker;
 import org.pfsw.julea.log4j2.testhelper.LogId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,7 @@ public class Junit4AsserterTest implements Junit4Log4j2Asserter
   private static final Logger LOG = LoggerFactory.getLogger(Junit4AsserterTest.class);
 
   @Rule
-  public Junit4LogEntriesTracker logTracker = trackLogger(Junit4AsserterTest.class);
+  public Junit4Log4j2Tracker logTracker = trackLogger(Junit4AsserterTest.class);
 
   @Override
   public LogEntriesTracker getLogTracker()
