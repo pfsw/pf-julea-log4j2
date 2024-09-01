@@ -7,11 +7,11 @@ This is usually helpful if functionality gets tested by a unit test that does no
 However, if there is some logging in the tested code it might be an option to ensure that specific log messages have been created
 or have **not** been created during the execution of that code.
 
-This library is built with JDK **8** and supports tracking of **log4j2** loggers only!  
+This library is built with JDK **8** and supports tracking of [Apache log4j2](https://logging.apache.org/log4j/2.x/) loggers only!  
 It can be used with **JUnit4** and **JUnit5**.    
 
-Of course this library can be used with **slf4j**, **jboss-logging** and **commons-logging** API as long as the runtime logging framework
-for the unit test execution is **log4j2**.
+Of course this library can also be used with **slf4j**, **jboss-logging** and **commons-logging** API as long as the runtime logging framework
+biding for unit test execution is **log4j2**.
 
 Set the following maven or gradle dependencies as appropriate for your project:
 
@@ -110,8 +110,8 @@ JUnit4 and JUnit5 cannot be mixed in a single test class!
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.pfsw.julea.core.LogEntriesTracker;
+import org.pfsw.julea.core.junit5.Junit5LogEntriesTracker;
 import org.pfsw.julea.log4j2.junit5.Junit5Log4j2Asserter;
-import org.pfsw.julea.log4j2.junit5.Junit5LogEntriesTracker;
 import org.pfsw.julea.log4j2.testhelper.LogId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -189,8 +189,8 @@ public class Junit5Test
 import org.junit.Rule;
 import org.junit.Test;
 import org.pfsw.julea.core.LogEntriesTracker;
+import org.pfsw.julea.core.junit4.Junit4LogEntriesTracker;
 import org.pfsw.julea.log4j2.junit4.junit4.Junit4Log4j2Asserter;
-import org.pfsw.julea.log4j2.junit4.junit4.Junit4LogEntriesTracker;
 import org.pfsw.julea.log4j2.testhelper.LogId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -233,7 +233,7 @@ import static org.pfsw.julea.core.assertions.Junit4LogAssertions.*;
 import org.junit.Rule;
 import org.junit.Test;
 import org.pfsw.julea.core.LogLevel;
-import org.pfsw.julea.log4j2.junit4.junit4.Junit4Log4j2Tracker;
+import org.pfsw.julea.log4j2.junit4.Junit4Log4j2Tracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -254,3 +254,12 @@ public class Junit4Test
   }
 }
 ````
+
+## Migration from v1.1.0
+
+With **v2.0.0** the following interfaces have been moved to other packages and import statements in classes where they have been used must be adapted accordingly:
+
+- org.pfsw.julea.**log4j2**.junit5.Junit5LogEntriesTracker -> org.pfsw.julea.**core**.junit5.Junit5LogEntriesTracker
+- org.pfsw.julea.**log4j2**.junit4.Junit4LogEntriesTracker -> org.pfsw.julea.**core**.junit4.Junit4LogEntriesTracker
+
+
