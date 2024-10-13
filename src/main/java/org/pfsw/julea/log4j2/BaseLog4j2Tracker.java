@@ -17,6 +17,7 @@ import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.Logger;
+import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.apache.logging.log4j.core.filter.AbstractFilter;
 import org.pfsw.julea.core.InMemoryLogAppender;
 import org.pfsw.julea.core.InMemoryLogEntriesTracker;
@@ -84,14 +85,17 @@ public abstract class BaseLog4j2Tracker implements InMemoryLogEntriesTracker
   protected void makeInheritParentAppendersIfReasonable(Logger logger)
   {
     Map<String, Appender> existingAppenders;
+    LoggerConfig loggerConfig;
+    boolean inheritsConfigFromParent;
 
+    loggerConfig = logger.get();
+    inheritsConfigFromParent = !logger.getName().equals(loggerConfig.getName());
     existingAppenders = logger.getAppenders();
-    if ((existingAppenders == null) || existingAppenders.isEmpty())
+    if (inheritsConfigFromParent || (existingAppenders == null) || existingAppenders.isEmpty())
     {
-      // The logger has no appenders assigned directly to it, it will be using
-      // its parent appenders.
-      // Since we are adding our own appender to that logger, we have to ensure that
-      // the parent logger appenders are still used, too.
+      // The logger has no appenders assigned directly to it, it will be using its parent appenders.
+      // Since we are adding our own appender to that logger directly, we have to ensure that
+      // the inherited parent logger appenders are still used, too.
       logger.setAdditive(true);
     }
   }
