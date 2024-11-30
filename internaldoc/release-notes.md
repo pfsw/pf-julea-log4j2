@@ -1,5 +1,9 @@
 # Release notes for pf-julea-log4j2 (JUnit Log Event Assertion)
 
+## Version 2.0.2 (30/11/2024), 25 Unit-Tests, 100.0% Coverage
+
+- Upgrade to gradle 8.11
+
 ## Version 2.0.1 (13/10/2024), 25 Unit-Tests, 100.0% Coverage
 
 - Fixed parent appenders detection to ensure that julea does not prevent explicitly configured logging.

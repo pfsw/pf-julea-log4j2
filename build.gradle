@@ -5,7 +5,7 @@ plugins {
 apply plugin: 'java-library'
 
 group = 'org.pfsw'
-version = '2.0.1'
+version = '2.0.2'
 
 ext {
   javaVersion = '8'
@@ -13,7 +13,8 @@ ext {
   autoModuleName = "${group}.${javaModuleNameSuffix}"
   libDisplayName = "PF JUnit Log Event Assertion (log4j2)"
   libDescription = "Library for asserting (log4j2) log events during junit testing"
-    
+  
+  includePath = project.pfswGradleIncludePath // usually specified in $GRADLE_USER_HOME/gradle.properties
   repoUrlThirdParty = project.hasProperty('thirdPartyRepoUrl') ? project.getProperty('thirdPartyRepoUrl') : ''
   repoUrlReleases = project.hasProperty('pfswReleaseRepoUrl') ? project.getProperty('pfswReleaseRepoUrl') : ''
   ossrhUrlStaging = project.hasProperty('ossrhStagingRepoUrl') ? project.getProperty('ossrhStagingRepoUrl') : ''
@@ -35,10 +36,19 @@ ext {
   log4jVersion = '2.20.0'
   junit4Version = '4.13.2'
   junit5Version = '5.11.0'
-}
+	
+	repositoriesClosure = {
+	  if (islocalDevelopment)
+	  {
+	    mavenLocal()
+	  }
+	  maven { 
+	    url repoUrlThirdParty 
+	  }
+	}}
 archivesBaseName = "pf-${javaModuleNameSuffix}"
 
-apply from: "${pfswGradleIncludePath}/java/publishing-java-full.gradle"
+apply from: "${includePath}/java/publishing-java-full-g8.gradle"
 
 signing {
   sign publishing.publications.mavenJava
@@ -79,7 +89,9 @@ repositories {
   }
 }
 
-wrapper { gradleVersion = '6.9' }
+repositories repositoriesClosure
+
+wrapper { gradleVersion = '8.11.1' }
 
 println "${libDisplayName}: ${project.name} ${project.version} (moduleName:${autoModuleName}) ; Java ${javaVersion}"
 println "Include path: ${pfswGradleIncludePath}"

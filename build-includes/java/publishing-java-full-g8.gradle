@@ -1,0 +1,106 @@
+apply plugin: 'maven-publish'
+apply from: "${pfswGradleIncludePath}/java/dependencies.gradle"
+apply from: "${pfswGradleIncludePath}/java/pom-publishing.gradle"
+
+// === The following is needed to create the artifacts === //
+
+def getDate() {
+  def date = new Date()
+  date.format('yyyy-MM-dd')
+}
+
+def getTimestamp() {
+  def date = new Date()
+  date.format("yyyy-MM-dd'T'HH:mm:ss")
+}
+
+ext {
+  vendor = "Manfred Duchrow Consulting & Software"
+  implementor = "Programmer's Friend"
+  today = getDate()
+  now_ts = getTimestamp()
+  jdk_version = System.getProperty('java.version')
+
+  manifest_attrs = [
+    "Specification-Title": project.name,
+    "Specification-Version": version,
+    "Specification-Vendor" : project.ext.vendor,
+    "Implementation-Title": "${project.group}:${project.archivesBaseName}:${project.version}",
+    "Implementation-Version": version,
+    "Implementation-Vendor" : project.ext.implementor,
+    "Implementation-Vendor-Id" : project.group,
+    "Build-Date" : "${project.ext.now_ts}",
+    "Build-JDK" : project.ext.jdk_version,
+    "Target-Compatibility" : project.compileJava.targetCompatibility
+  ]
+  if (project.hasProperty('compilerVersion')) {
+    manifest_attrs["Java-Compiler"] = project.getProperty('compilerVersion')
+  }
+  if (project.hasProperty('autoModuleName')) {
+    manifest_attrs["Automatic-Module-Name"] = project.getProperty('autoModuleName')
+  }
+}
+
+jar {
+  manifest {
+    attributes(manifest_attrs)
+  }
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+tasks.withType(GenerateModuleMetadata) {
+  enabled = false
+}
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      groupId group
+      artifactId archivesBaseName
+      version version
+      from components.java
+      
+      pom.withXml {
+        if (publishWithoutDependencies)
+        {
+          removeAllPomDependencies(asNode())          
+        }
+        else
+        {
+          fixPomDependencyScopes(asNode())          
+        }
+      }
+      
+      pom {
+        name = project.hasProperty('libDisplayName') ? project.getProperty('libDisplayName') : null
+        description = project.hasProperty('libDescription') ? project.getProperty('libDescription') : null
+        url = 'http://programmers-friend.org/'
+        licenses {
+          license {
+            name = 'Eclipse Public License - v 2.0'
+            url = 'https://www.eclipse.org/legal/epl-2.0/'
+          }
+        }
+        developers {
+        	developer {
+        	  id = 'mdu'
+        	  name = 'Manfred Duchrow'
+        	  email = 'manfred.duchrow@pfsw.org'
+        	}
+        }
+        scm {
+          url = "https://github.com/pfsw/${archivesBaseName}"
+          connection = "scm:git:https://github.com/pfsw/${archivesBaseName}.git"
+          developerConnection = "scm:git:https://github.com/pfsw/${archivesBaseName}.git"
+        }
+      }
+    }
+  }
+  // repositoriesClosure - see common/ext-variables.gradle
+  repositories repositoriesClosure
+}
+
