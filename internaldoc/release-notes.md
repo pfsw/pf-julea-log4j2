@@ -1,6 +1,6 @@
 # Release notes for pf-julea-log4j2 (JUnit Log Event Assertion)
 
-## Version 2.1.0 (30/01/2026), 25 Unit-Tests, 100.0% Coverage
+## Version 2.1.0 (31/01/2026), 25 Unit-Tests, 100.0% Coverage
 
 - Upgrade to pf-julea-core 1.1.0 for better assertion failure reporting
 

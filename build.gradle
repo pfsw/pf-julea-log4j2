@@ -1,5 +1,5 @@
 plugins {
-  id 'signing'
+  id "com.vanniktech.maven.publish" version "0.34.0" // requires Java 11 for build
 }
 
 apply plugin: 'java-library'
@@ -42,17 +42,33 @@ ext {
 	  {
 	    mavenLocal()
 	  }
+	  if (localReleasePath)
+	  {
+	    maven {
+	      name 'LocalRelease'
+	      url localReleasePath
+	    }
+	  }
 	  maven { 
 	    url repoUrlThirdParty 
 	  }
-	}}
+	}
+}
+
 archivesBaseName = "pf-${javaModuleNameSuffix}"
 
-apply from: "${includePath}/java/publishing-java-full-g8.gradle"
+project.sourceCompatibility = project.ext.javaVersion
+project.targetCompatibility = project.ext.javaVersion
 
-signing {
-  sign publishing.publications.mavenJava
+tasks.withType(JavaCompile) {
+  sourceCompatibility = project.ext.javaVersion
+  targetCompatibility = project.ext.javaVersion
+  options.release = Integer.valueOf(project.ext.javaVersion)
+  options*.encoding = project.ext.sourceEncoding
+  options.compilerArgs << "-Xlint:unchecked"
 }
+
+apply from: "${includePath}/java/publishing-java-full-maven-central.gradle"
 
 dependencies {
   api group: group, name: 'pf-julea-core', version: '1.1.0'
@@ -69,24 +85,8 @@ dependencies {
   testRuntimeOnly group: 'org.slf4j', name: 'slf4j-api', version: '1.7.36'
 }
 
-project.sourceCompatibility = javaVersion
-project.targetCompatibility = javaVersion
-
-tasks.withType(JavaCompile) {
-  sourceCompatibility = javaVersion
-  targetCompatibility = javaVersion
-  options*.encoding = project.ext.sourceEncoding
-  options.compilerArgs << "-Xlint:unchecked"
-}
-
-repositories {
-  if (islocalDevelopment)
-  {
-    mavenLocal()
-  }
-  maven { 
-    url repoUrlThirdParty 
-  }
+tasks.withType(Javadoc) {
+  options.addStringOption('Xdoclint:none', '-quiet')
 }
 
 repositories repositoriesClosure
