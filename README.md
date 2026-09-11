@@ -11,13 +11,13 @@ This library is built with JDK **8** and supports tracking of [Apache log4j2](ht
 It can be used with **JUnit4** and **JUnit5**.    
 
 Of course this library can also be used with **slf4j**, **jboss-logging** and **commons-logging** API as long as the runtime logging framework
-biding for unit test execution is **log4j2**.
+binding for unit test execution is **log4j2**.
 
 > Ensure that **jboss-logmanager** is **not** on the classpath!
 
 Set the following maven or gradle dependencies as appropriate for your project:
 
-## Dependencies
+## Dependencies in your project
 
 See also [mvnrepository](https://mvnrepository.com/artifact/org.pfsw/pf-julea-log4j2).
 
@@ -30,19 +30,19 @@ Maven:
   <dependency>
     <groupId>org.pfsw</groupId>
     <artifactId>pf-julea-log4j2</artifactId>
-    <version>2.1.0</version>
+    <version>2.1.1</version>
     <scope>test</scope>
   </dependency>
   <dependency>
     <groupId>org.apache.logging.log4j</groupId>
     <artifactId>log4j-core</artifactId>
-    <version>2.20.0</version>
+    <version>2.26.1</version>
     <scope>test</scope>
   </dependency>
   <dependency>
     <groupId>org.junit.jupiter</groupId>
     <artifactId>junit-jupiter-api</artifactId>
-    <version>5.11.0</version>
+    <version>5.14.4</version>
     <scope>test</scope>
   </dependency>
 </dependencies>
@@ -52,9 +52,9 @@ Gradle:
 
 ````groovy
 dependencies {
-  testImplementation group: 'org.pfsw', name: 'pf-julea-log4j2', version: '2.1.0'
-  testImplementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.20.0'
-  testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.11.0'
+  testImplementation group: 'org.pfsw', name: 'pf-julea-log4j2', version: '2.1.1'
+  testImplementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.26.1'
+  testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.14.4'
 }
 ````
 
@@ -67,13 +67,13 @@ Maven:
   <dependency>
     <groupId>org.pfsw</groupId>
     <artifactId>pf-julea-log4j2</artifactId>
-    <version>2.1.0</version>
+    <version>2.1.1</version>
     <scope>test</scope>
 	</dependency>
   <dependency>
     <groupId>org.apache.logging.log4j</groupId>
     <artifactId>log4j-core</artifactId>
-    <version>2.20.0</version>
+    <version>2.26.1</version>
     <scope>test</scope>
   </dependency>
   <dependency>
@@ -89,8 +89,8 @@ Gradle:
 
 ````groovy
 dependencies {
-  testImplementation group: 'org.pfsw', name: 'pf-julea-log4j2', version: '2.1.0'
-  testImplementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.20.0'
+  testImplementation group: 'org.pfsw', name: 'pf-julea-log4j2', version: '2.1.1'
+  testImplementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.26.1'
   testImplementation group: 'junit', name: 'junit', version: '4.13.2'
 }
 ````
